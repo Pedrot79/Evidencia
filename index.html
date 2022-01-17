@@ -14,7 +14,7 @@
 <body>
     <h3>Ejemplo Ajax usando el objeto nativo XMLHttpRequest usando JSON</h3>
     <br>
-    <button id="btnUno" class="btn btn-primary " style="margin-bottom: 10px; margin-left: 30px;">Petición de Información</button>
+    <button id="btn" class="btn btn-primary " style="margin-bottom: 10px; margin-left: 30px;">Petición de Información</button>
     <div>
         <table class="table table-primary table-striped">
             <thead>
@@ -37,35 +37,28 @@
 </html>
 
 <script>
-    function ajax() {
-        const http = new XMLHttpRequest;
-        const url = "https://jsonplaceholder.typicode.com/todos";
-        http.onreadystatechange = function () {
-            // Validar respuesta
-            if (this.status == 200 && this.readyState == 4) {
-                console.log(this.responseText);
-                let y = document.getElementById("idcuerpo");
-
-                const json = JSON.parse(this.responseText);
-                idcuerpo.innerHTML = '';
-                for (const x of json) {
-                    console.log(x.title);
-                    idcuerpo.innerHTML += `
+    let url = "https://jsonplaceholder.typicode.com/todos";
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("btn").addEventListener("click", function () {
+                mostrar(data);
+            });
+        })
+        .catch((rej) => {
+            console.log("Error");
+        })
+    function mostrar(data) {
+        for (const variable of data) {
+            console.log(data);
+            ide.innerHTML += `
                         <tr>
-                            <td>${x.userId}</td>
-                            <td>${x.id}</td>
-                            <td>${x.title}</td>
-                            <td>${x.completed}</td>
+                            <td>${variable.userId}</td>
+                            <td>${variable.id}</td>
+                            <td>${variable.title}</td>
+                            <td>${variable.completed}</td>
                         </tr>
                     `
-                }
-            }
         }
-        http.open('GET', url, true);
-        http.send();
     }
-
-    document.getElementById("btnUno").addEventListener("click", function () {
-        ajax();
-    });
 </script>
